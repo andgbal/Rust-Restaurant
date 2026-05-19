@@ -1,5 +1,8 @@
 // src/menu.rs
 
+use std::thread::sleep;
+use std::time::Duration;
+
 pub enum OrderStatus {
     Pending,
     Preparing { minutes_remaining: i32 },
@@ -12,6 +15,7 @@ pub trait HasBasicInfo {
     fn name(&self) -> &str;
     fn price(&self) -> f32;
     fn stock_count(&self) -> i32;
+    fn get_std_serve_time(&self) -> u64;
     fn modify_stock(&mut self, amount: i32);
     fn get_status(&self) -> &OrderStatus;
     fn modify_status(&mut self, value: OrderStatus);
@@ -50,13 +54,14 @@ pub trait MenuItemLogic: HasBasicInfo {
 
 // The Unchangeable Manager (Blanket)
 pub trait MenuItem: HasBasicInfo + MenuItemLogic {
-    fn serve(&mut self) {
+    fn serve(&mut self) -> Result<(), String>{
         self.modify_status(OrderStatus::Pending);
         println!("--- Restaurant Order ---");
         if self.stock_count() <= 0 {
             println!("Request order {} out of stock!", self.name());
             self.modify_status(OrderStatus::Cancelled("Out of stock".to_string()));
             self.modify_stock(1);
+            return Err("Out of stock".to_string());
         }
         else{
             
@@ -64,6 +69,9 @@ pub trait MenuItem: HasBasicInfo + MenuItemLogic {
             self.modify_stock(-1);
 
             self.modify_status(OrderStatus::Preparing { minutes_remaining: 8});
+            println!("[COOKING] Starting work on: {}", self.name());
+            sleep(Duration::from_secs(self.get_std_serve_time()));
+            
             if self.discount_percentage() != 0.0{
                 println!("Congrats! Got a discount price for only ${:.2}", self.discount_percentage() * self.price())
             }
@@ -71,6 +79,7 @@ pub trait MenuItem: HasBasicInfo + MenuItemLogic {
                 println!("Price for ${:.2}", self.price())
             }
             self.modify_status(OrderStatus::Served);
+            Ok(())
         }
     }
 }

@@ -5,6 +5,7 @@ pub struct Salad {
     name: String,
     price: f32,
     stock: i32,
+    std_serve_time: u64,
     status: OrderStatus
 }
 
@@ -15,6 +16,7 @@ impl Salad {
             price,
             stock,
             status: OrderStatus::Pending,
+            std_serve_time: 4
         }
     }
 }
@@ -29,6 +31,7 @@ impl HasBasicInfo for Salad {
         self.print_status();
     }
     fn get_status (&self) -> &OrderStatus { &self.status }
+    fn get_std_serve_time(&self) -> u64 {self.std_serve_time}
 }
 impl MenuItemLogic for Salad {} // Uses default serve_logic
 
@@ -37,6 +40,7 @@ pub struct Flambe {
     name: String,
     price: f32,
     stock: i32,
+    std_serve_time: u64,
     status: OrderStatus
 }
 
@@ -47,6 +51,7 @@ impl Flambe {
             price,
             stock,
             status: OrderStatus::Pending,
+            std_serve_time: 8
         }
     }
 }
@@ -60,6 +65,7 @@ impl HasBasicInfo for Flambe {
         self.status = value;
         self.print_status();
     }
+    fn get_std_serve_time(&self) -> u64 {self.std_serve_time}
     fn get_status (&self) -> &OrderStatus { &self.status }
 }
 

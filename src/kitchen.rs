@@ -1,6 +1,6 @@
 // src/kitchen.rs
 
-use crate::menu::{HasBasicInfo, MenuItem, MenuItemLogic, OrderStatus};
+use crate::menu::MenuItem;
 
 pub struct Kitchen {
     pub orders: Vec<Box<dyn MenuItem>>,
@@ -22,8 +22,9 @@ impl Kitchen {
         println!("--- KITCHEN STARTING SERVICE ---");
         // We iterate through the vector
         for dish in self.orders.iter_mut() {
-            // dish is a Box<dyn MenuItem>, so we can call .serve()
-            dish.serve(); 
+            if let Err(reason) = dish.serve() {
+                println!("[!] KITCHEN ALERT: {}", reason);
+            }
         }
     }
 }
