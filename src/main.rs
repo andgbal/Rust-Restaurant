@@ -11,14 +11,17 @@ use kitchen::{Kitchen};
 fn main() {
     let mut my_kitchen = Kitchen::new();
 
-    // 1. Create the dish
-    let salad = Salad::new("Garden Salad", 8.50, 0); 
-    let Flambe = Flambe::new("Garden Salad", 14.0, 2); 
+    // 1. Create distinct dishes for every order
+    let garden_salad_1 = Salad::new("Garden Salad 1", 8.50, 1);
+    let garden_salad_2 = Salad::new("Garden Salad 2", 8.50, 1); // A brand new salad!
+    let caesar_salad = Salad::new("Caesar Salad", 10.0, 3); 
+    let cherry_flambe = Flambe::new("Cherry Flambe", 14.0, 2);
     
-    // 2. Wrap it in a Box and add it to the kitchen
-    // This MOVEs the salad into the kitchen's vector
-    my_kitchen.add_order(Box::new(salad));
-    my_kitchen.add_order(Box::new(Flambe));
+    // 2. Move them into the kitchen (Each variable is only used ONCE)
+    my_kitchen.add_order(Box::new(garden_salad_1));
+    my_kitchen.add_order(Box::new(garden_salad_2));
+    my_kitchen.add_order(Box::new(caesar_salad));
+    my_kitchen.add_order(Box::new(cherry_flambe));
 
     // 3. Process the orders
     my_kitchen.process_all();
