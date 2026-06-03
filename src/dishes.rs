@@ -4,17 +4,15 @@ use crate::menu::{HasBasicInfo, MenuItemLogic, OrderStatus};
 pub struct Salad {
     name: String,
     price: f32,
-    stock: i32,
     std_serve_time: u64,
     status: OrderStatus
 }
 
 impl Salad {
-    pub fn new(name: &str, price: f32, stock: i32) -> Self { // Made pub
+    pub fn new(name: &str, price: f32) -> Self { // Made pub
         Self {
             name: name.to_string(),
             price,
-            stock,
             status: OrderStatus::Pending,
             std_serve_time: 4
         }
@@ -24,14 +22,18 @@ impl Salad {
 impl HasBasicInfo for Salad {
     fn name(&self) -> &str { &self.name }
     fn price(&self) -> f32 { self.price }
-    fn stock_count(&self) -> i32 { self.stock}
-    fn modify_stock(&mut self, amount: i32) { self.stock += amount }
     fn modify_status (&mut self, value: OrderStatus) {
         self.status = value;
         self.print_status();
     }
     fn get_status (&self) -> &OrderStatus { &self.status }
     fn get_std_serve_time(&self) -> u64 {self.std_serve_time}
+    fn required_ingredients(&self) -> Vec<(String, u32)> {
+        vec![
+            ("Lettuce".to_string(), 3),
+            ("Tomato".to_string(), 1),
+        ]
+    }
 }
 impl MenuItemLogic for Salad {} // Uses default serve_logic
 
@@ -39,17 +41,15 @@ impl MenuItemLogic for Salad {} // Uses default serve_logic
 pub struct Flambe {
     name: String,
     price: f32,
-    stock: i32,
     std_serve_time: u64,
     status: OrderStatus
 }
 
 impl Flambe {
-    pub fn new(name: &str, price: f32, stock: i32) -> Self { // Made pub
+    pub fn new(name: &str, price: f32) -> Self { // Made pub
         Self {
             name: name.to_string(),
             price,
-            stock,
             status: OrderStatus::Pending,
             std_serve_time: 8
         }
@@ -59,14 +59,18 @@ impl Flambe {
 impl HasBasicInfo for Flambe {
     fn name(&self) -> &str { &self.name }
     fn price(&self) -> f32 { self.price }
-    fn stock_count(&self) -> i32 { self.stock}
-    fn modify_stock(&mut self, amount: i32) { self.stock += amount }
     fn modify_status (&mut self, value: OrderStatus) {
         self.status = value;
         self.print_status();
     }
     fn get_std_serve_time(&self) -> u64 {self.std_serve_time}
     fn get_status (&self) -> &OrderStatus { &self.status }
+    fn required_ingredients(&self) -> Vec<(String, u32)> {
+        vec![
+            ("Cherry".to_string(), 5),
+            ("Egg".to_string(), 3),
+        ]
+    }
 }
 
 impl MenuItemLogic for Flambe {
